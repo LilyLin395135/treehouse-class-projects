@@ -1,0 +1,25 @@
+{
+    "singers": [
+        {
+            "singer_name": "周杰倫",
+            "singer_pic": "https://storage.ctinews.com/compression/files/default/cut-1685331829-MlcRs63.webp",
+            "other_name": "Jay Chou",
+            "singer_id": 4558,
+            "id": 1
+        },
+        {
+            "singer_name": "林俊杰",
+            "singer_pic": "http://y.gtimg.cn/music/photo_new/T001R150x150M000001BLpXF2DyJe2.webp",
+            "other_name": "JJ Lin",
+            "singer_id": 4286,
+            "id": 2
+        },
+        {
+            "singer_name": "G.E.M.鄧紫棋",
+            "singer_pic":"http://y.gtimg.cn/music/photo_new/T001R150x150M000001fNHEf1SFEFN.webp",
+            "other_name": "Gloria Tang",
+            "singer_id": 13948,
+            "id": 3
+        }
+    ]
+}
