@@ -5,10 +5,12 @@ const express = require('express');
 const app = express();
 
 //建立一個路由
-app.get('/1008411211995.html', (req, res) => {
+app.get('/:id.html', (req, res) => {
+    //取得URL router參數
+    console.log(req.params.id);//回傳id的值 (這個id必須和上面路由的id長一樣)
     res.setHeader('Content-Type', 'text/html;charset=utf-8');
     res.end('商品詳情');
-});//到網址http://localhost:3000/1008411211995.html 畫面上有"商品詳情"
+});//router改用id就任何一組數字都能看到"商品詳情"了
 
 //設定伺服器監聽的埠號
 app.listen(3000, () => {
