@@ -24,7 +24,7 @@ app.get('/singer/:id.html', (req, res) => {
         res.end('<h1> 404 - Not Found </h1>');
         return;
     }
-
+    //如果result有資料，就顯示歌手名稱和圖片
     res.end(`
     <!DOCTYPE html>
     <html>
