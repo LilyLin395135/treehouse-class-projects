@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>jQuery發送AJAX請求</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.bootcdn.net/ajax/libs/Buttons/2.0.0/css/buttons.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="page-header">jQuery發送AJAX請求</h1>
+      <button class="button button-primary">GET</button>
+      <button class="button button-action">POST</button>
+      <button class="button button-highlight button-glow">通用型方法ajax</button>
+    </div>
+    <script>
+        //get方法，參數a=100，b=200，會放在url後面query string
+        $("button").eq(0).click(function(){
+            $.get("http://localhost:3000/jquery-server",{a:100,b:200}, function(data, status){
+                console.log("Data: " + data + "\nStatus: " + status);
+            });
+        });
+        //post方法，參數a=100，b=200，會放在request body (payload)
+        $("button").eq(1).click(function(){
+            $.post("http://localhost:3000/jquery-server",{a:100,b:200}, function(data, status){
+                console.log("Data: " + data + "\nStatus: " + status);
+            }, "json");
+        });
+        //ajax通用方法
+        $("button").eq(2).click(function(){
+            $.ajax(
+            //ajax的參數是一個物件
+            //物件裡面有屬性：url、type、data、success、dataType  
+            {
+                url: "http://localhost:3000/jquery-server",
+                type: "post",
+                data: {a:100,b:200},
+                dataType: "json",
+                //成功處理
+                success: function(data, status){
+                    console.log("Data: " + data + "\nStatus: " + status);
+                },
+                //超時時間
+                timeout: 3000,
+                //錯誤處理
+                error: function(xhr, status, error){
+                    console.log("Status: " + status + "\nError: " + error);
+                }
+            });
+        });
+
+    </script>
+  </body>
+</html>

@@ -29,7 +29,7 @@
         xhr.send();
         //事件綁定 處理伺服器返回的結果
         //on when當...的時候
-        //readystate是xhr中的屬性，表示狀態0(初始化), 1(open方法完成), 2(send方法完成), 3(伺服器返回部分結果), 4(伺服器返回全部結果)
+        //readyState是xhr中的屬性，表示狀態0(初始化), 1(open方法完成), 2(send方法完成), 3(伺服器返回部分結果), 4(伺服器返回全部結果)
         //change 改變
         xhr.onreadystatechange = function() {
           //當伺服器返回的狀態碼為4時，表示伺服器返回的數據已經完全接收

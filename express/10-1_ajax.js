@@ -12,7 +12,41 @@ app.get('/server', (request, response) => {
 
     //回應一個字串
     response.send('Hello World!');
-});//瀏覽器把請求發送過來後，如果是get請求，且路徑是'/'，則執行這個函數，並且返回'Hello World!'
+});
+
+//jQuery get服務
+app.get('/jquery-server', (request, response) => {
+
+    //設置回應Header，允許跨域
+    response.setHeader('Access-Control-Allow-Origin', '*');//允許所有網域訪問
+
+    const data = {name: 'Lily', age: 20};
+
+    //回應一個字串
+    response.send(JSON.stringify(data));
+});
+
+//jQuery post服務
+app.post('/jquery-server', (request, response) => {
+
+    //設置回應Header，允許跨域
+    response.setHeader('Access-Control-Allow-Origin', '*');//允許所有網域訪問
+
+    const data = {name: 'Lily'};
+    //回應一個字串
+    response.send(JSON.stringify(data));
+});
+
+//超時回應
+app.get('/delay-server', (request, response) => {
+    //設置回應Header，允許跨域
+    response.setHeader('Access-Control-Allow-Origin', '*');//允許所有網域訪問
+
+    setTimeout(() => {
+        //回應一個字串
+        response.send('延時回應');
+    }, 3000);
+});
 
 //設定伺服器監聽的埠號
 app.listen(3000, () => {
