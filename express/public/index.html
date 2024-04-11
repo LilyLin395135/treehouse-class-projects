@@ -1,11 +1,53 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Express</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>AJAX Get 請求</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
     <h1>Express</h1>
     <p>Welcome to Express</p>
+    <button id="btn">發送請求</button>
+    <div id="result"></div>
+
+    <script>
+      //取得button元素
+      const btn = document.getElementById("btn");
+      const result = document.getElementById("result");
+      //綁定click事件
+      btn.onclick=function(){
+        //建立XMLHttpRequest物件
+        const xhr = new XMLHttpRequest();//以後看到xhr要想到AJAX
+        //初始化 設置請求方法和URL
+        xhr.open("GET", "http://localhost:3000/server?a=100&b=200&c=300");
+        //發送請求
+        xhr.send();
+        //事件綁定 處理伺服器返回的結果
+        //on when當...的時候
+        //readystate是xhr中的屬性，表示狀態0(初始化), 1(open方法完成), 2(send方法完成), 3(伺服器返回部分結果), 4(伺服器返回全部結果)
+        //change 改變
+        xhr.onreadystatechange = function() {
+          //當伺服器返回的狀態碼為4時，表示伺服器返回的數據已經完全接收
+          if (xhr.readyState === 4) {
+            //2開頭成功
+            if (xhr.status >= 200 && xhr.status < 300) {
+              //處理返回的結果 狀態碼、狀態字串、回應header、回應body
+              // console.log("狀態碼：" + xhr.status);//200
+              // console.log("狀態字串：" + xhr.statusText);//OK
+              // console.log("回應header：" + xhr.getAllResponseHeaders()); //Content-Type: text/html; charset=utf-8
+              // console.log("回應body：" + xhr.response);//Hello World!
+              result.innerHTML = xhr.responseText;
+            } else {
+              console.log("發生錯誤：" + xhr.status);
+            }
+          }
+        };
+      }
+    </script>
   </body>
 </html>
