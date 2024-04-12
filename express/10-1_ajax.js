@@ -38,7 +38,7 @@ app.post('/jquery-server', (request, response) => {
 });
 
 //超時回應
-app.get('/delay-server', (request, response) => {
+app.get('/delay', (request, response) => {
     //設置回應Header，允許跨域
     response.setHeader('Access-Control-Allow-Origin', '*');//允許所有網域訪問
 
