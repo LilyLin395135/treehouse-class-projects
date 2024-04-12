@@ -8,6 +8,9 @@ html(lang="en")
     header
         h1 Flash Cards
         section#content
+        ul
+          each color in colors
+            li= color
         h2=prompt 
         //-在pug可以用=variable來放置變數，再從app.js中傳入變數的值
         if hint

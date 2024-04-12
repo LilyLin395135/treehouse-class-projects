@@ -4,6 +4,15 @@ const express = require("express");
 //啟用一個Express應用程式
 const app = express();
 
+const colors = [
+    'red',
+    'orange',
+    'yellow',
+    'green',
+    'blue',
+    'purple'
+  ];
+
 app.set("view engine", "pug"); //set方法做Express的設置，設定view engine為pug
 
 //建立一個路由
@@ -20,6 +29,7 @@ app.get("/cards", (request, response) => {
   response.render("card", {
     prompt: "Who is buried in Grant's tomb?",
     hint: "Think about whose tomb it is.",
+    colors
   });
 });
 
