@@ -15,7 +15,12 @@ app.use(cookieParser()); //使用cookie-parser套件
 //建立一個路由
 app.get("/", (request, response) => {
   const name = request.cookies.username; //取得cookie的username值
-  response.render("index", { name: name }); //回應一個index.pug檔案
+  if(name){
+    response.render("index", { name: name }); //回應一個index.pug檔案
+    }
+    else{
+      response.redirect("/hello"); //重新導向到hello路由
+    }
 });
 
 //建立cards由，第二個頁面
@@ -42,6 +47,12 @@ app.post("/hello", (request, response) => {
   response.cookie("username", request.body.username); //設定一個cookie，名稱為username，值為request.body.username
   response.redirect("/");
 });
+
+//建立goodbye路由，Post method
+app.post("/goodbye", (request, response) => {
+    response.clearCookie("username"); //清除cookie
+    response.redirect("/hello"); //重新導向到hello路由
+  });
 
 //建立伺服器路由port 3000
 app.listen(3000, () => {
