@@ -1,0 +1,23 @@
+//建立pug語法的基本頁面
+doctype html
+html(lang="en")
+    head
+        title Flash Cards
+        link(rel='stylesheet' href='/stylesheets/style.css')
+    body
+    header
+        h1 Flash Cards
+        section#content
+        h2=prompt 
+        //-在pug可以用=variable來放置變數，再從app.js中傳入變數的值
+        p
+            i Hint: #{hint}
+        footer 
+        p An app to help you study!
+        a(href='/study') Study
+        p
+            | Or
+            a(href='/cards') View all cards
+        p
+            | Or
+            a(href='/cards/new') Create a new card
