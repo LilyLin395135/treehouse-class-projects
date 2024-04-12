@@ -5,10 +5,17 @@ const express = require("express");
 //啟用一個Express應用程式
 const app = express();
 
+app.set("view engine","pug");//set方法做Express的設置，設定view engine為pug
+
 //建立一個路由
 app.get("/",(request,response)=>{
+    response.render("index"); //回應一個index.pug檔案
+});
+
+//建立第二個路由，第二個頁面
+app.get("/about",(request,response)=>{
     //回應一個字串
-    response.send("<h1>Hello World!</h1>");
+    response.send("<h1>JavaScript & Express, Hi.</h1>");
 });
 
 //建立伺服器路由port 3000
