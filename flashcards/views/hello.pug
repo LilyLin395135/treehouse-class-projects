@@ -1,8 +1,9 @@
 extends layout.pug 
 block content 
-    section#content
-        h2 Welcome to Flash Cards
+    if name
+        h2 Welcome, #{name}!
+    else
         form(action="/hello" method="post")
             label please enter your name: 
-            input(type="text" name="username")
+                input(type="text" name="username")
             button(type="submit") Submit

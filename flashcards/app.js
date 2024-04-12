@@ -1,21 +1,16 @@
 //require方法使用套件Express，放進express變數中，之後都用此變數操作express
 const express = require("express");
 const bodyParser = require("body-parser"); //引入body-parser套件
+const cookieParser = require("cookie-parser"); //引入cookie-parser套件
 
 //啟用一個Express應用程式
 const app = express();
 
-const colors = [
-    'red',
-    'orange',
-    'yellow',
-    'green',
-    'blue',
-    'purple'
-  ];
+const colors = ["red", "orange", "yellow", "green", "blue", "purple"];
 
 app.set("view engine", "pug"); //set方法做Express的設置，設定view engine為pug
-app.use(bodyParser.urlencoded({extended:false})); //使用body-parser套件，解析urlencoded格式的請求
+app.use(bodyParser.urlencoded({ extended: false })); //使用body-parser套件，解析urlencoded格式的請求
+app.use(cookieParser()); //使用cookie-parser套件
 
 //建立一個路由
 app.get("/", (request, response) => {
@@ -31,19 +26,25 @@ app.get("/cards", (request, response) => {
   response.render("card", {
     prompt: "Who is buried in Grant's tomb?",
     hint: "Think about whose tomb it is.",
-    colors
+    colors,
   });
 });
 
 //建立hello路由
 app.get("/hello", (request, response) => {
-  response.render("hello"); //回應一個hello.pug檔案
+  response.render("hello",{name:request.cookies.username}); //回應一個hello.pug檔案
 });
 
 //建立hello路由，Post method
 app.post("/hello", (request, response) => {
-    response.json(request.body); //回應一個json格式的request.body
+  //set a cookie
+    response.cookie("username", request.body.username); //設定一個cookie，名稱為username，值為request.body.username
+
+  // response.json(request.body); //回應一個json格式的request.body
+  response.render("hello", {
+    name: request.body.username,
   });
+});
 
 //建立伺服器路由port 3000
 app.listen(3000, () => {
