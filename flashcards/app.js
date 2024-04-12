@@ -14,8 +14,8 @@ app.get("/", (request, response) => {
 //建立第二個路由，第二個頁面
 app.get("/cards", (request, response) => {
   //傳入prompt變數到card.pug檔案，方法一
-  response.locals.prompt = "Who is buried in Grant's tomb?"; //locals是Express的一個物件，可以存放一些變數，這裡存放prompt變數
-  response.render("card");
+  //   response.locals.prompt = "Who is buried in Grant's tomb?"; //locals是Express的一個物件，可以存放一些變數，這裡存放prompt變數
+  //   response.render("card");
   //傳入prompt變數到card.pug檔案，方法二
   response.render("card", {
     prompt: "Who is buried in Grant's tomb?",
