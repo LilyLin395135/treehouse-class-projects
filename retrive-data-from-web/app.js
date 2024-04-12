@@ -54,3 +54,5 @@ function getProfile(username) {
 }
 const users = process.argv.slice(2);//取得命令列參數，去掉前面兩個元素
 users.forEach(getProfile);//JS寫法把users陣列裡的每個元素都傳進getProfile函式裡
+
+//Terminal 輸入 node app.js lilylin2 jennifernordell
