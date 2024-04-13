@@ -9,6 +9,7 @@ const app = express();
 app.set("view engine", "pug"); //set方法做Express的設置，設定view engine為pug
 app.use(bodyParser.urlencoded({ extended: false })); //使用body-parser套件，解析urlencoded格式的請求
 app.use(cookieParser()); //使用cookie-parser套件
+app.use("/static",express.static("public")); //使用express.static中介軟體，將public資料夾設為靜態資源目錄
 
 //import the router from routes/index.js
 const mainRoutes = require("./routes"); //引入routes/index.js檔案
