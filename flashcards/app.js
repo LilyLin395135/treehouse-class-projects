@@ -39,7 +39,7 @@ app.use((request, response, next) => {
 app.use((error, request, response, next) => {
   const statusCode = error.status || 500; // 如果 error.status 是 undefined，則使用 500 作為默認值
   response.status(statusCode); //設定response的狀態碼為500
-  response.render("error", { error: error.message || error }); //回應一個error.pug檔案，並傳入一個變數error，值為error.message或error
+  response.render("error", { error}); //回應一個error.pug檔案，並傳入一個變數error，值為error.message或error
 });
 
 //建立伺服器路由port 3000

@@ -6,15 +6,13 @@ const router = express.Router();
 const { data } = require("../data/flashcardData.json"); //引入flashcardData.json檔案
 const { cards } = data; //separated out the cards 解構賦值，取得data物件的cards屬性
 
-const colors = ["red", "orange", "yellow", "green", "blue", "purple"];
-
 //因為我們在app.js中設定了app.use("/cards",cardRoutes);
 //所以這裡的路由都是/cards開頭，可以只寫"/"，不用寫"/cards"
-router.get("/", (request, response) => {
+//用冒號( colon ) 告訴express冒號後有參數id (a route parameter called id)
+router.get("/:id", (request, response) => {
     response.render("card", {
-      prompt: cards[0].question,
-      hint: cards[0].hint,
-      colors
+      prompt: cards[request.params.id].question,
+      hint: cards[request.params.id].hint,
     });
   });
 
