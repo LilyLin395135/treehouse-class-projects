@@ -12,6 +12,18 @@ app.set("view engine", "pug"); //set方法做Express的設置，設定view engin
 app.use(bodyParser.urlencoded({ extended: false })); //使用body-parser套件，解析urlencoded格式的請求
 app.use(cookieParser()); //使用cookie-parser套件
 
+app.use((request, response, next) => {
+    console.log("Hello");
+    const error=new Error("Oh noes!"); //建立一個錯誤物件
+    error.status=500; //設定錯誤物件的狀態碼為500
+    return next(error);
+});
+
+app.use((request, response, next) => {
+    console.log("World");
+    return next();
+});
+
 //建立一個路由
 app.get("/", (request, response) => {
   const name = request.cookies.username; //取得cookie的username值
@@ -52,6 +64,17 @@ app.post("/hello", (request, response) => {
 app.post("/goodbye", (request, response) => {
     response.clearCookie("username"); //清除cookie
     response.redirect("/hello"); //重新導向到hello路由
+  });
+
+//Error Handling Middleware
+app.use((error, request, response, next) => {
+    // response.locals.error = error; //locals是Express的一個物件，可以存放一些變數，這裡存放error變數
+    // response.render("error"); //回應一個error.pug檔案
+    //上面等於response.render("error", { error });
+    response.status(error.status); //設定response的狀態碼為500
+    response.render("error", { error }); //回應一個error.pug檔案，並傳入一個變數error，值為error
+
+
   });
 
 //建立伺服器路由port 3000
