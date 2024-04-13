@@ -11,15 +11,6 @@ router.get("/", (request, response) => {
   }
 });
 
-//建立cards路由
-router.get("/cards", (request, response) => {
-  response.render("card", {
-    prompt: "Who is buried in Grant's tomb?",
-    hint: "Think about whose tomb it is.",
-    colors,
-  });
-});
-
 //建立hello路由
 router.get("/hello", (request, response) => {
   response.render("hello"); //回應一個hello.pug檔案，並傳入一個變數name，值為request.cookies.username
