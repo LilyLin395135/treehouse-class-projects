@@ -12,6 +12,12 @@ app.set("view engine", "pug"); //set方法做Express的設置，設定view engin
 app.use(bodyParser.urlencoded({ extended: false })); //使用body-parser套件，解析urlencoded格式的請求
 app.use(cookieParser()); //使用cookie-parser套件
 
+//import the router from routes/index.js
+const mainRoutes = require("./routes"); //引入routes/index.js檔案
+
+//use the routes variable to make middleware
+ app.use(mainRoutes); //使用mainRoutes變數，作為middleware
+
 app.use((request, response, next) => {
     console.log("Hello");
     return next();
@@ -21,44 +27,6 @@ app.use((request, response, next) => {
     console.log("World");
     return next();
 });
-
-//建立一個路由
-app.get("/", (request, response) => {
-  const name = request.cookies.username; //取得cookie的username值
-  if(name){
-    response.render("index", { name: name }); //回應一個index.pug檔案
-    }
-    else{
-      response.redirect("/hello"); //重新導向到hello路由
-    }
-});
-
-//建立cards由，第二個頁面
-app.get("/cards", (request, response) => {
-  response.render("card", {
-    prompt: "Who is buried in Grant's tomb?",
-    hint: "Think about whose tomb it is.",
-    colors,
-  });
-});
-
-//建立hello路由
-app.get("/hello", (request, response) => {
-  response.render("hello"); //回應一個hello.pug檔案，並傳入一個變數name，值為request.cookies.username
-});
-
-//建立hello路由，Post method
-app.post("/hello", (request, response) => {
-  //set a cookie
-  response.cookie("username", request.body.username); //設定一個cookie，名稱為username，值為request.body.username
-  response.redirect("/");
-});
-
-//建立goodbye路由，Post method
-app.post("/goodbye", (request, response) => {
-    response.clearCookie("username"); //清除cookie
-    response.redirect("/hello"); //重新導向到hello路由
-  });
 
 //Handling 404 Errors
 app.use((request, response, next) => {
