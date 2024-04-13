@@ -10,10 +10,15 @@ const { cards } = data; //separated out the cards 解構賦值，取得data物�
 //所以這裡的路由都是/cards開頭，可以只寫"/"，不用寫"/cards"
 //用冒號( colon ) 告訴express冒號後有參數id (a route parameter called id)
 router.get("/:id", (request, response) => {
-    response.render("card", {
-      prompt: cards[request.params.id].question,
-      hint: cards[request.params.id].hint,
-    });
+    //query string to get question or answer
+    const { side } = request.query; //解構賦值，取得query物件的side屬性
+    const { id } = request.params; //解構賦值，取得params物件的id屬性
+    const text = cards[id][side]; //取得cards陣列的id索引的side屬性
+    const { hint } = cards[id]; //解構賦值，取得cards陣列的id索引的hint屬性
+
+    const templateData = { text, hint }; //建立一個templateData物件，包含text、id、hint
+    response.render("card", templateData); //回應一個card.pug檔案，並傳入templateData
+    
   });
 
   //export
