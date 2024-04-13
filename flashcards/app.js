@@ -6,45 +6,41 @@ const cookieParser = require("cookie-parser"); //引入cookie-parser套件
 //啟用一個Express應用程式
 const app = express();
 
-const colors = ["red", "orange", "yellow", "green", "blue", "purple"];
-
 app.set("view engine", "pug"); //set方法做Express的設置，設定view engine為pug
 app.use(bodyParser.urlencoded({ extended: false })); //使用body-parser套件，解析urlencoded格式的請求
 app.use(cookieParser()); //使用cookie-parser套件
 
 //import the router from routes/index.js
 const mainRoutes = require("./routes"); //引入routes/index.js檔案
+const cardRoutes = require("./routes/cards"); //引入cards.js檔案
 
 //use the routes variable to make middleware
- app.use(mainRoutes); //使用mainRoutes變數，作為middleware
+app.use(mainRoutes);
+app.use("/cards", cardRoutes); //使用cards路由
 
 app.use((request, response, next) => {
-    console.log("Hello");
-    return next();
+  console.log("Hello");
+  return next();
 });
 
 app.use((request, response, next) => {
-    console.log("World");
-    return next();
+  console.log("World");
+  return next();
 });
 
 //Handling 404 Errors
 app.use((request, response, next) => {
-    const error = new Error("Not Found"); //建立一個錯誤物件
-    error.status = 404; //設定錯誤物件的狀態碼為404
-    next(error); //呼叫next方法，並傳入錯誤物件
-  });
+  const error = new Error("Not Found"); //建立一個錯誤物件
+  error.status = 404; //設定錯誤物件的狀態碼為404
+  next(error); //呼叫next方法，並傳入錯誤物件
+});
 
 //Error Handling Middleware
 app.use((error, request, response, next) => {
-    // response.locals.error = error; //locals是Express的一個物件，可以存放一些變數，這裡存放error變數
-    // response.render("error"); //回應一個error.pug檔案
-    //上面等於response.render("error", { error });
-    response.status(error.status); //設定response的狀態碼為500
-    response.render("error", { error }); //回應一個error.pug檔案，並傳入一個變數error，值為error
-
-
-  });
+  const statusCode = error.status || 500; // 如果 error.status 是 undefined，則使用 500 作為默認值
+  response.status(statusCode); //設定response的狀態碼為500
+  response.render("error", { error: error.message || error }); //回應一個error.pug檔案，並傳入一個變數error，值為error.message或error
+});
 
 //建立伺服器路由port 3000
 app.listen(3000, () => {

@@ -1,13 +1,12 @@
 extends layout.pug 
 block content
-        section#content
-        ul
-          each color in colors
+    section#content
+    ul
+        each color in colors
             li= color
-        h2=prompt 
-            //-在pug可以用=variable來放置變數，再從app.js中傳入變數的值
-        if hint
-            p
-                i Hint: #{hint}
-        else 
-            p There is no hint.
+    h2=prompt 
+    if hint
+        p
+            i Hint: #{hint}
+    else 
+        p There is no hint.
