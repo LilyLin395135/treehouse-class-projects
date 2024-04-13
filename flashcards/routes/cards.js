@@ -16,7 +16,17 @@ router.get("/:id", (request, response) => {
     const text = cards[id][side]; //取得cards陣列的id索引的side屬性
     const { hint } = cards[id]; //解構賦值，取得cards陣列的id索引的hint屬性
 
-    const templateData = { text, hint }; //建立一個templateData物件，包含text、id、hint
+    const templateData = {id, text};//建立一個templateData物件，值為text
+    if(side==="question"){ //如果side等於question
+        templateData.hint = hint; //設定hint值為hint
+        templateData.sideToShow = "answer"; //設定sideToShow值為answer
+        templateData.sideToShowDisplay = "Answer"; //設定sideToShowDisplay值為Answer
+    }
+    else if(side==="answer"){ //如果side等於answer
+        templateData.sideToShow = "question"; //設定sideToShow值為question
+        templateData.sideToShowDisplay = "Question"; //設定sideToShowDisplay值為Question
+    }
+
     response.render("card", templateData); //回應一個card.pug檔案，並傳入templateData
     
   });
