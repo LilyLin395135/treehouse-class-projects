@@ -14,9 +14,7 @@ app.use(cookieParser()); //使用cookie-parser套件
 
 app.use((request, response, next) => {
     console.log("Hello");
-    const error=new Error("Oh noes!"); //建立一個錯誤物件
-    error.status=500; //設定錯誤物件的狀態碼為500
-    return next(error);
+    return next();
 });
 
 app.use((request, response, next) => {
@@ -37,10 +35,6 @@ app.get("/", (request, response) => {
 
 //建立cards由，第二個頁面
 app.get("/cards", (request, response) => {
-  //傳入prompt變數到card.pug檔案，方法一
-  //   response.locals.prompt = "Who is buried in Grant's tomb?"; //locals是Express的一個物件，可以存放一些變數，這裡存放prompt變數
-  //   response.render("card");
-  //傳入prompt變數到card.pug檔案，方法二
   response.render("card", {
     prompt: "Who is buried in Grant's tomb?",
     hint: "Think about whose tomb it is.",
@@ -64,6 +58,13 @@ app.post("/hello", (request, response) => {
 app.post("/goodbye", (request, response) => {
     response.clearCookie("username"); //清除cookie
     response.redirect("/hello"); //重新導向到hello路由
+  });
+
+//Handling 404 Errors
+app.use((request, response, next) => {
+    const error = new Error("Not Found"); //建立一個錯誤物件
+    error.status = 404; //設定錯誤物件的狀態碼為404
+    next(error); //呼叫next方法，並傳入錯誤物件
   });
 
 //Error Handling Middleware
