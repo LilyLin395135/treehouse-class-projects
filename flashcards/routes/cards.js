@@ -23,10 +23,11 @@ router.get("/:id", (request, response) => {
     if (!side) { //如果side不存在
       response.redirect(`/cards/${id}?side=question`); //重新導向到/cards/id?side=question
     }
+    const name = request.cookies.username; //取得cookies物件的username屬性  
     const text = cards[id][side]; //取得cards陣列的id索引的side屬性
     const { hint } = cards[id]; //解構賦值，取得cards陣列的id索引的hint屬性
 
-    const templateData = {id, text};//建立一個templateData物件，值為text
+    const templateData = {id, text, name};//建立一個templateData物件，值為text
     if(side==="question"){ //如果side等於question
         templateData.hint = hint; //設定hint值為hint
         templateData.sideToShow = "answer"; //設定sideToShow值為answer
