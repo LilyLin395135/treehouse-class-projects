@@ -10,7 +10,7 @@ function getJSON(url, callback) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', url);
   xhr.onload = () => {
-    if(xhr.status === 200) {
+    if (xhr.status === 200) {
       let data = JSON.parse(xhr.responseText);//astrosUrl拿回的資料
       return callback(data);//執行callback function,去拿wiki的資料
     }
@@ -43,19 +43,18 @@ function generateHTML(data) {
 //add event listener, click the button to getJSON
 //callback function occurs only when the button is clicked
 //a click will add a task to the callback queue, each event will eventually go onto the call stack to be executed
-btn.addEventListener('click', () => {
+btn.addEventListener('click', (event) => {
   getJSON(
     astrosUrl,
     (json) => {//astrosUrl完成後的資料，我們放進json變數
       //json結構是物件，裡面有一個key屬性people，裡面是一個陣列，裡面是太空人員的資料有name和craft
-      json.people.map( person => {//person代表people中每一個人
+      json.people.map(person => {//person代表people中每一個人
         getJSON(
           //放入wikiUrl+person.name，去拿wiki的資料
           wikiUrl + person.name,//完成後就會執行generateHTML，建立append new DOM elements，顯示太空人在網頁上
           generateHTML
         );
       });
-
-    }
-
-  );});
+    });
+  event.target.remove();//remove the button after it's clicked
+});
