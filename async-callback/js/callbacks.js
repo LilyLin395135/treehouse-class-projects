@@ -38,6 +38,7 @@ function generateHTML(data) {
   }
 }
 
-//call getJSON function and pass it the astrosUrl
-//在index.html中f12可以看到7名太空人的資料
-getJSON(astrosUrl);
+//add event listener, click the button to getJSON
+//callback function occurs only when the button is clicked
+//a click will add a task to the callback queue, each event will eventually go onto the call stack to be executed
+btn.addEventListener('click', () => getJSON(astrosUrl));
