@@ -18,6 +18,17 @@ function getJSON(url, callback) {
   xhr.send();//發送請求
 }
 
+function getProfiles(json) {
+ //json結構是物件，裡面有一個key屬性people，裡面是一個陣列，裡面是太空人員的資料有name和craft
+ json.people.map(person => {//person代表people中每一個人
+  getJSON(
+    //放入wikiUrl+person.name，去拿wiki的資料
+    wikiUrl + person.name,//完成後就會執行generateHTML，建立append new DOM elements，顯示太空人在網頁上
+    generateHTML
+  );
+});
+}
+
 // Generate the markup for each profile
 function generateHTML(data) {
   const section = document.createElement('section');
@@ -46,15 +57,6 @@ function generateHTML(data) {
 btn.addEventListener('click', (event) => {
   getJSON(
     astrosUrl,
-    (json) => {//astrosUrl完成後的資料，我們放進json變數
-      //json結構是物件，裡面有一個key屬性people，裡面是一個陣列，裡面是太空人員的資料有name和craft
-      json.people.map(person => {//person代表people中每一個人
-        getJSON(
-          //放入wikiUrl+person.name，去拿wiki的資料
-          wikiUrl + person.name,//完成後就會執行generateHTML，建立append new DOM elements，顯示太空人在網頁上
-          generateHTML
-        );
-      });
-    });
+    getProfiles);
   event.target.remove();//remove the button after it's clicked
 });
