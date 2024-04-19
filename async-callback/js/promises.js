@@ -57,9 +57,14 @@ function generateHTML(data) {
 }
 
 btn.addEventListener('click', (event) => {
+  event.target.textContent = "Loading...";
+
   getJSON(astrosUrl)
     .then(getProfiles)//如果是fulfilled，就執行getProfiles
     .then(generateHTML)//如果是fulfilled，就執行generateHTML
-    .catch(err => console.log(err));//如果是rejected，就catch回傳錯誤
-  event.target.remove();
+    .catch(err => {
+      peopleList.innerHTML = '<h3>Something went wrong!</h3>';
+      console.log(err)
+    })//結果是rejected就在畫面上顯示Something went wrong!，並且在console.log顯示錯誤訊息
+    .finally(() => event.target.remove());//不管是fulfilled還是rejected，都會執行finally
 });
