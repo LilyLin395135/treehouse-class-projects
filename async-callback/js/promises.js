@@ -3,28 +3,15 @@ const wikiUrl = 'https://en.wikipedia.org/api/rest_v1/page/summary/';
 const peopleList = document.getElementById('people');
 const btn = document.querySelector('button');
 
-function getJSON(url) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.onload = () => {//這裡是個要等待的callback function
-      if (xhr.status === 200) {
-        let data = JSON.parse(xhr.responseText);
-        resolve(data);//turn the promise from pending to fulfilled
-      } else {
-        reject(Error(xhr.statusText));
-      }
-    };
-    xhr.onerror = () => reject(Error('A network error occurred'));
-    //因為connectivity issues當HttpRequest失敗不會回傳status code，所以用onerror
-    //來reject promise
-    xhr.send();
-  });
-}
-
 function getProfiles(json) {
   const profiles = json.people.map(person => {
-    return getJSON(wikiUrl + person.name);
+    const craft = person.craft;
+    return fetch(wikiUrl + person.name)//改用fetch API，取代getJSON
+      .then(response => response.json())//把fetch的結果轉成json格式
+      .then(profile => {
+        return { ...profile, craft };//把profile和craft合併成一個新的物件
+      })
+      .catch(err => console.log('Error Fetching Wiki: ', err));//如果fetch失敗，就在console.log顯示錯誤訊息
   });
   return Promise.all(profiles);
   //Promise.all()接收一個promise陣列，並且在所有promise都完成後，回傳一個新的promise
@@ -40,6 +27,7 @@ function generateHTML(data) {
     if (person.type === 'standard') {
       section.innerHTML = `
       <img src=${person.thumbnail.source}>
+      <span>${person.craft}</span>
       <h2>${person.title}</h2>
       <p>${person.description}</p>
       <p>${person.extract}</p>
@@ -59,7 +47,8 @@ function generateHTML(data) {
 btn.addEventListener('click', (event) => {
   event.target.textContent = "Loading...";
 
-  getJSON(astrosUrl)
+  fetch(astrosUrl)//fetch是一個API，用來發送AJAX request，並且回傳一個promise
+    .then(res => res.json())//把fetch的結果轉成json格式
     .then(getProfiles)//如果是fulfilled，就執行getProfiles
     .then(generateHTML)//如果是fulfilled，就執行generateHTML
     .catch(err => {
