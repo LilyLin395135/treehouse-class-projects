@@ -9,6 +9,24 @@ app.set('view engine', 'pug');
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static('public'));
 
+//使用middleware自動包起我們的routes進try catch
+//這樣就不用在每個route裡面寫try catch
+function asyncHandler(cb) {
+  //會回傳一個Asynchronous function作為我們route的handler callback
+  //所以會有req,res,next三個參數
+  return async (req, res, next) => {
+    //在try會await任何放進asyncHandler的函式
+    try {
+      await cb(req, res, next);
+    }
+    //catch error and render error page
+    //就不用在每個route裡面都寫error了，現在就可以到route拿掉error handling的try catch了
+    catch (err) {
+      res.render('error', { error: err });
+    }
+  };
+}
+
 //CALL BACKS
 // function getUsers(cb){
 //   fs.readFile('data.json', 'utf8', (err, data) => {//到data.json拿資料
@@ -85,17 +103,17 @@ function getUsers() {
 //首先await會用在asnchronous函式裡面
 //→所以要將getUsers callback function 轉成promise。在function 前面加上async，這會讓JavaScript知道這是一個asynchronous function。
 //在async function裡面就可以使用await，並存入一個變數
-app.get('/', async (req, res) => {
-  //handle error藥用try catch
-  try {
-    const users = await getUsers();//不用改變getUsers()方法，因為已經是promise了。而await可以用在任何有回傳promise的函式。
-    //await會等非同步方法完成後，再繼續執行下一行程式碼。
-    //我們可以確保直到拿到users後才會執行下一行程式碼。
-    res.render('index', { title: "users", users: users.users });
-  } 
-  catch (err) {
-    res.render('error', { error: err });
-  }
-});
+app.get('/', asyncHandler(async (req, res) => {
+  const users = await getUsers();
+  //確認error page是否有成功
+  // throw new Error('fake error');
+  res.render('index', { title: "users", users: users.users });
+}));
+//用asyncHandler來做error handling
+//asyncHandler會變成callback在我們的route裡面
+//所以會先移動現在的callback function暫時往下移，再放進asyncHandler
+
+
+
 
 app.listen(3000, () => console.log('App listening on port 3000! http://localhost:3000/'));
