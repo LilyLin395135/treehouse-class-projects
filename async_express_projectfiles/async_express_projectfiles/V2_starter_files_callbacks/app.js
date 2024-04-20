@@ -33,18 +33,21 @@ app.use(express.static('public'));
 //   });
 // });  
 
+
+
+
 //PROMISES
-function getUsers(){
+function getUsers() {
   //要能用.then() .catch()，getUsers要先讓方法return一個promise。
   //new Promise()使用callback function，有兩個參數，resolve和reject。
-  return new Promise((resolve,reject)=>{
-    fs.readFile('data.json', 'utf8', (err, data) =>{
+  return new Promise((resolve, reject) => {
+    fs.readFile('data.json', 'utf8', (err, data) => {
       //如果有error，就reject
-      if(err){
+      if (err) {
         reject(err);
       }
       //如果沒有error，就resolve
-      else{
+      else {
         const users = JSON.parse(data);
         resolve(users);
       }
@@ -53,30 +56,46 @@ function getUsers(){
   });
 };
 
-app.get('/', (req,res) => {
-  //promise可以用then和catch來處理。讓我們的程式碼更乾淨
-  //首先call getUsers，.then() .catch()
-  //而要能用.then() .catch()，getUsers要先讓方法return一個promise。
-  getUsers()
-  //then方法接受一個function，所以會放匿名函式，這個function會接受resolve的值。
-  .then((users)=>{
-    //(我們用then回傳假的error，來看看error page是否有成功。)
-    // throw new Error('fake error');
-    //會有個參數users，以取得getUsers()方法提供的資料
-    //現在有了users，就可以render index page
-    res.render('index', {title: "users",users:users.users});
-    //就可以嘗試開啟網頁看是否成功了
-  })
-  //當有更多要達到的事項，就可以用then來達成，而不是callback hell
+// app.get('/', (req,res) => {
+//   //promise可以用then和catch來處理。讓我們的程式碼更乾淨
+//   //首先call getUsers，.then() .catch()
+//   //而要能用.then() .catch()，getUsers要先讓方法return一個promise。
+//   getUsers()
+//   //then方法接受一個function，所以會放匿名函式，這個function會接受resolve的值。
+//   .then((users)=>{
+//     //(我們用then回傳假的error，來看看error page是否有成功。)
+//     // throw new Error('fake error');
+//     //會有個參數users，以取得getUsers()方法提供的資料
+//     //現在有了users，就可以render index page
+//     res.render('index', {title: "users",users:users.users});
+//     //就可以嘗試開啟網頁看是否成功了
+//   })
+//   //當有更多要達到的事項，就可以用then來達成，而不是callback hell
 
-  //如果有error，就catch
-  //也接受callback function
-  .catch((err)=>{
-    //會define a parameter for error，然後再render error page
-    res.render('error', {error: err});
-    //我們用then回傳假的error，來看看是否有成功。
-  });
+//   //如果有error，就catch
+//   //也接受callback function
+//   .catch((err)=>{
+//     //會define a parameter for error，然後再render error page
+//     res.render('error', {error: err});
+//     //我們用then回傳假的error，來看看是否有成功。
+//   });
+// });
 
+//async/await 一般都會與promise一起使用
+//首先await會用在asnchronous函式裡面
+//→所以要將getUsers callback function 轉成promise。在function 前面加上async，這會讓JavaScript知道這是一個asynchronous function。
+//在async function裡面就可以使用await，並存入一個變數
+app.get('/', async (req, res) => {
+  //handle error藥用try catch
+  try {
+    const users = await getUsers();//不用改變getUsers()方法，因為已經是promise了。而await可以用在任何有回傳promise的函式。
+    //await會等非同步方法完成後，再繼續執行下一行程式碼。
+    //我們可以確保直到拿到users後才會執行下一行程式碼。
+    res.render('index', { title: "users", users: users.users });
+  } 
+  catch (err) {
+    res.render('error', { error: err });
+  }
 });
 
 app.listen(3000, () => console.log('App listening on port 3000! http://localhost:3000/'));
